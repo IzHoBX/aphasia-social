@@ -22,6 +22,7 @@ def index(request):
 def f(request):
     global count
     count += 1
+    print("Testing:" + count)
     print("XXXX: accepted:" + request.get_full_path())
     emoji2Vec = EmojiText.EmojiVec.EmojiVec()
     print("Emoji2Vec instantiated")
