@@ -7,6 +7,9 @@ import KeywordExtract.ExtractKeyword
 import EmojiText.EmojiVec
 import json
 
+import urllib
+import requests
+
 AGENT = "/agent?sentence="
 PREFIX = "/agent?sentence="
 RETURN_LIMIT = 5
@@ -24,7 +27,7 @@ def takeScore(x):
     return x[1]
 
 def f(request):
-    global emoji2Vec
+    '''global emoji2Vec
     print("Testing:" + str(count))
     print("XXXX: accepted:" + request.get_full_path())
     sentence = getSentence(request.get_full_path())
@@ -44,6 +47,12 @@ def f(request):
     print("sending response...")
 
     res = HttpResponse(x, content_type="application/json")
+    res['Access-Control-Allow-Origin'] = '*'
+    '''
+    url = "http://localhost:7777/agent"
+    data = urllib.parse.urlencode({"sentence":getSentence(request.get_full_path())})
+    r = requests.get(url, data)
+    res = HttpResponse(r.text, content_type="application/json")
     res['Access-Control-Allow-Origin'] = '*'
 
     return res

@@ -1,1 +1,2 @@
-web: gunicorn gettingstarted.wsgi --prefork --log-file -
+worker: python backend.py
+web: gunicorn gettingstarted.wsgi --log-file -
