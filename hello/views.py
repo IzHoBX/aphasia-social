@@ -12,7 +12,7 @@ PREFIX = "/agent?sentence="
 RETURN_LIMIT = 5
 
 count = 0
-#emoji2Vec = EmojiText.EmojiVec.EmojiVec()
+emoji2Vec = EmojiText.EmojiVec.EmojiVec()
 
 # Create your views here.
 def index(request):
@@ -24,7 +24,6 @@ def takeScore(x):
     return x[1]
 
 def f(request):
-    print(x)
     global emoji2Vec
     print("Testing:" + str(count))
     print("XXXX: accepted:" + request.get_full_path())
