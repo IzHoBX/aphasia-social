@@ -4,9 +4,12 @@ import json
 from .models import Greeting
 
 AGENT = "/agent"
+count = 0
+
 
 # Create your views here.
 def index(request):
+    global count
     return render(request, "index.html")
     # return HttpResponse('Hello from Python!')
 
