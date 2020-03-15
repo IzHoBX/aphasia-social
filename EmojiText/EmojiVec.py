@@ -14,7 +14,7 @@ class EmojiVec:
     indexToName = []
 
     def __init__(self):
-        self.nlp = spacy.load("en_core_web_lg")
+        self.nlp = spacy.load("en_core_web_md")
         self.nameToLink = pickle.load(open(NAME2LINK_PATH, "rb"))
         allVectors = []
         for name, link in self.nameToLink.items():
