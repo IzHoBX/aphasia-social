@@ -14,9 +14,6 @@ AGENT = "/agent?sentence="
 PREFIX = "/agent?sentence="
 RETURN_LIMIT = 5
 
-count = 0
-emoji2Vec = EmojiText.EmojiVec.EmojiVec()
-
 # Create your views here.
 def index(request):
     global count
