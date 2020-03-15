@@ -1,1 +1,1 @@
-web: gunicorn gettingstarted.wsgi --timeout 300 --log-file -
+web: gunicorn gettingstarted.wsgi --prefork--log-file -
