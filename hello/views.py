@@ -10,6 +10,8 @@ count = 0
 # Create your views here.
 def index(request):
     global count
+    count += 1
+    print("asdvsafvasfgasd" + str(count))
     return render(request, "index.html")
     # return HttpResponse('Hello from Python!')
 
