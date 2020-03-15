@@ -12,6 +12,7 @@ PREFIX = "/agent?sentence="
 RETURN_LIMIT = 5
 
 count = 0
+emoji2Vec = EmojiText.EmojiVec.EmojiVec()
 
 # Create your views here.
 def index(request):
@@ -20,11 +21,9 @@ def index(request):
     # return HttpResponse('Hello from Python!')
 
 def f(request):
-    global count
-    count += 1
+    global emoji2Vec
     print("Testing:" + str(count))
     print("XXXX: accepted:" + request.get_full_path())
-    emoji2Vec = EmojiText.EmojiVec.EmojiVec()
     print("Emoji2Vec instantiated")
     sentence = getSentence(request.get_full_path())
     print("Received sentence:" + sentence)
