@@ -14,7 +14,7 @@ def f(request):
     print(request.path)
     x = {"a":"B"}
     x = json.dumps(x)
-    return HttpResponse(bytes(x), content_type="application/json")
+    return HttpResponse(x, content_type="application/json")
 
 
 def db(request):
