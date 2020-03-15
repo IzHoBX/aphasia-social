@@ -8,6 +8,7 @@ import EmojiText.EmojiVec
 import json
 
 AGENT = "/agent?sentence="
+PREFIX = "/agent?sentence="
 
 
 # Create your views here.
@@ -18,6 +19,9 @@ def index(request):
 
 def f(request):
     print("XXXX: accepted:" + request.path)
+    print(request.content_params)
+    print(request.path_info)
+    print(request.headers)
     emoji2Vec = EmojiText.EmojiVec.EmojiVec()
     print("Emoji2Vec instantiated")
     sentence = getSentence(request.path)
