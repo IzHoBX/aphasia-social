@@ -20,6 +20,9 @@ def index(request):
     return render(request, "index.html")
     # return HttpResponse('Hello from Python!')
 
+def takeScore(x):
+    return x[1]
+
 def f(request):
     global emoji2Vec
     print("Testing:" + str(count))
