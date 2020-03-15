@@ -27,7 +27,6 @@ def f(request):
     global emoji2Vec
     print("Testing:" + str(count))
     print("XXXX: accepted:" + request.get_full_path())
-    print("Emoji2Vec instantiated")
     sentence = getSentence(request.get_full_path())
     print("Received sentence:" + sentence)
 

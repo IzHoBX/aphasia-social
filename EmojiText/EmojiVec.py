@@ -14,6 +14,7 @@ class EmojiVec:
     indexToName = []
 
     def __init__(self):
+        print("loading model")
         self.nlp = spacy.load("en_core_web_md")
         self.nameToLink = pickle.load(open(NAME2LINK_PATH, "rb"))
         allVectors = []
@@ -26,6 +27,7 @@ class EmojiVec:
             self.indexToName.append(name)
         allVectors = numpy.array(allVectors)
         self.nbrs = NearestNeighbors(n_neighbors=1, algorithm='ball_tree').fit(allVectors)
+        print("Emoji2Vec instantiated")
 
     def getEmoji(self, word):
         token = self.nlp(word)
