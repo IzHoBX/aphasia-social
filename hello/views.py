@@ -25,7 +25,7 @@ def f(request):
     print("XXXX: accepted:" + request.get_full_path())
     emoji2Vec = EmojiText.EmojiVec.EmojiVec()
     print("Emoji2Vec instantiated")
-    sentence = getSentence(request.path)
+    sentence = getSentence(request.get_full_path())
     print("Received sentence:" + sentence)
 
     ans = []
@@ -48,7 +48,7 @@ def f(request):
     res = HttpResponse(x, content_type="application/json")
     res['Access-Control-Allow-Origin'] = '*'
 
-    return
+    return res
 
 
 def getSentence(inx):
