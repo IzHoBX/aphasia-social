@@ -1,1 +1,1 @@
-web: gunicorn gettingstarted.wsgi --prefork--log-file -
+web: gunicorn gettingstarted.wsgi --prefork --log-file -
