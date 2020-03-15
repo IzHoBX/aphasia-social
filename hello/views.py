@@ -3,6 +3,10 @@ from django.http import HttpResponse
 import json
 from .models import Greeting
 
+import KeywordExtract.ExtractKeyword
+import EmojiText.EmojiVec
+import json
+
 AGENT = "/agent?sentence="
 
 count = 0
