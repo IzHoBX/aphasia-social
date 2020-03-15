@@ -31,7 +31,7 @@ class EmojiVec:
 
     def getEmoji(self, word):
         token = self.nlp(word)
-        wordEmbed = (token.vector/token.vector_norm).reshape(1, 96)
+        wordEmbed = (token.vector/token.vector_norm).reshape(1, 300)
         distance, index = self.nbrs.kneighbors(wordEmbed)
         print(self.indexToName[index[0][0]])
         return self.nameToLink[self.indexToName[index[0][0]]], distance[0][0]
