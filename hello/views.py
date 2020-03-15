@@ -37,11 +37,7 @@ def f(request):
     if len(ans) > RETURN_LIMIT:
         ans.sort(reverse=True, key=takeScore)
         ans = ans[:RETURN_LIMIT]
-
-    x = {}
-    for i in range(0, len(ans)):
-        x[str(i)] = ans[i][0]
-    x = json.dumps(x)
+    x = json.dumps({"emojis":ans})
 
     print("sending response...")
 
