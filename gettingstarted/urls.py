@@ -5,6 +5,9 @@ from django.contrib import admin
 admin.autodiscover()
 
 import hello.views
+import EmojiText.EmojiVec
+
+emoji2Vec = EmojiText.EmojiVec.EmojiVec()
 
 # To add a new path, first import the app:
 # import blog

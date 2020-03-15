@@ -11,7 +11,6 @@ AGENT = "/agent?sentence="
 PREFIX = "/agent?sentence="
 RETURN_LIMIT = 5
 
-count = 0
 emoji2Vec = EmojiText.EmojiVec.EmojiVec()
 
 # Create your views here.
@@ -25,7 +24,6 @@ def takeScore(x):
 
 def f(request):
     global emoji2Vec
-    print("Testing:" + str(count))
     print("XXXX: accepted:" + request.get_full_path())
     sentence = getSentence(request.get_full_path())
     print("Received sentence:" + sentence)
