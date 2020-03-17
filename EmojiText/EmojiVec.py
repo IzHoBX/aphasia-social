@@ -4,6 +4,7 @@ import spacy
 import numpy
 import pickle
 import google.cloud.firestore
+import random
 
 SPACE_PATH = "EmojiText/emojispace"
 NAME2LINK_PATH = "EmojiText/emojilib"
@@ -27,6 +28,8 @@ class EmojiVec:
     def getEmoji(self, word):
         if not word[-1].isalpha():
             word = word[:-1]
+        if len(word) == 0:
+            return self.nameToLink[self.indexToName[random.randrange(0, len(self.indexToName))]], 0
         word = word.lower()
         try:
             token = self.db.collection("vectors").document(word).get().to_dict()
