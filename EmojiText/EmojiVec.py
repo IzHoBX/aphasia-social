@@ -36,9 +36,9 @@ class EmojiVec:
         try:
             token = self.db.collection("vectors").document(word).get().to_dict()
         except google.cloud.exceptions.NotFound:
-            token = {"0":[0]*300, "1":0}
+            return self.nameToLink[self.indexToName[random.randrange(0, len(self.indexToName))]], 0
         if token == None:# exception seems will not be raised
-            token = {"0":[0]*300, "1":0}
+            return self.nameToLink[self.indexToName[random.randrange(0, len(self.indexToName))]], 0
         token["0"] = numpy.array(token["0"])
         if not token["1"] == 0:
             wordEmbed = (token["0"]/token["1"]).reshape(1, 300)
