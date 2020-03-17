@@ -1,10 +1,11 @@
 import emoji
-from sklearn.metrics.pairwise import cosine_similarity
 from sklearn.neighbors import NearestNeighbors
 import spacy
 import numpy
 import pickle
+import google.cloud.firestore
 
+SPACE_PATH = "EmojiText/emojispace"
 NAME2LINK_PATH = "EmojiText/emojilib"
 
 class EmojiVec:
@@ -12,26 +13,27 @@ class EmojiVec:
     nlp = ""
     nrbs = ""
     indexToName = []
+    db = ""
 
     def __init__(self):
         print("loading model")
-        self.nlp = spacy.load("en_core_web_md")
+        model = pickle.load(open(SPACE_PATH, "rb"))
+        self.indexToName = model[1]
+        self.nrbs = model[0]
         self.nameToLink = pickle.load(open(NAME2LINK_PATH, "rb"))
-        allVectors = []
-        for name, link in self.nameToLink.items():
-            token = self.nlp(name)
-            if token.vector_norm == 0:
-                print(name)
-            else:
-                allVectors.append(token.vector/token.vector_norm)
-            self.indexToName.append(name)
-        allVectors = numpy.array(allVectors)
-        self.nbrs = NearestNeighbors(n_neighbors=1, algorithm='ball_tree').fit(allVectors)
+        self.db = google.cloud.firestore.Client.from_service_account_json('EmojiText/auth.json')
         print("Emoji2Vec instantiated")
 
     def getEmoji(self, word):
-        token = self.nlp(word)
-        wordEmbed = (token.vector/token.vector_norm).reshape(1, 300)
-        distance, index = self.nbrs.kneighbors(wordEmbed)
+        try:
+            token = self.db.collection("vectors").document(word).get().to_dict()
+        except google.cloud.exceptions.NotFound:
+            token = {"0":[0]*300, "1":0}
+        token["0"] = numpy.array(token["0"])
+        if not token["1"] == 0:
+            wordEmbed = (token["0"]/token["1"]).reshape(1, 300)
+        else:
+            wordEmbed = token["0"].reshape(1, 300)
+        distance, index = self.nrbs.kneighbors(wordEmbed)
         print(self.indexToName[index[0][0]])
         return self.nameToLink[self.indexToName[index[0][0]]], distance[0][0]

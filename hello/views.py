@@ -13,7 +13,6 @@ RETURN_LIMIT = 5
 
 # Create your views here.
 def index(request):
-    global count
     return render(request, "index.html")
     # return HttpResponse('Hello from Python!')
 
@@ -21,7 +20,7 @@ def takeScore(x):
     return x[1]
 
 def f(request):
-    global emoji2Vec
+    emoji2Vec = EmojiText.EmojiVec.EmojiVec()
     print("XXXX: accepted:" + request.get_full_path())
     sentence = getSentence(request.get_full_path())
     print("Received sentence:" + sentence)
