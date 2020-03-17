@@ -25,6 +25,9 @@ class EmojiVec:
         print("Emoji2Vec instantiated")
 
     def getEmoji(self, word):
+        if not word[-1].isalpha():
+            word = word[:-1]
+        word = word.lower()
         try:
             token = self.db.collection("vectors").document(word).get().to_dict()
         except google.cloud.exceptions.NotFound:
