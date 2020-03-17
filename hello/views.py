@@ -36,7 +36,7 @@ def f(request):
     for link, score in ans.items():
         anslist.append((link, score))
     if len(anslist) > RETURN_LIMIT:
-        anslist.sort(reverse=True, key=takeScore)
+        anslist.sort(key=takeScore)
         anslist = anslist[:RETURN_LIMIT]
     x = json.dumps({"emojis":anslist})
 
