@@ -14,7 +14,7 @@ indexToName = []
 
 for name, link in nameToLink.items():
     if "flag:" in name:
-        name = name[len("flag:""):]
+        name = name[len("flag:"):]
     token = nlp(name)
     if token.vector_norm == 0:
         print(name)
