@@ -5,6 +5,7 @@ import numpy
 import pickle
 import google.cloud.firestore
 import random
+import sys
 
 SPACE_PATH = "EmojiText/emojispace"
 NAME2LINK_PATH = "EmojiText/emojilib"
@@ -31,14 +32,14 @@ class EmojiVec:
         if len(word) > 0 and not word[0].isalpha():
             word = word[1:]
         if len(word) == 0:
-            return self.nameToLink[self.indexToName[random.randrange(0, len(self.indexToName))]], 0
+            return self.nameToLink[self.indexToName[random.randrange(0, len(self.indexToName))]], sys.maxsize
         word = word.lower()
         try:
             token = self.db.collection("vectors").document(word).get().to_dict()
         except google.cloud.exceptions.NotFound:
-            return self.nameToLink[self.indexToName[random.randrange(0, len(self.indexToName))]], 0
+            return self.nameToLink[self.indexToName[random.randrange(0, len(self.indexToName))]], sys.maxsize
         if token == None:# exception seems will not be raised
-            return self.nameToLink[self.indexToName[random.randrange(0, len(self.indexToName))]], 0
+            return self.nameToLink[self.indexToName[random.randrange(0, len(self.indexToName))]], sys.maxsize
         token["0"] = numpy.array(token["0"])
         if not token["1"] == 0:
             wordEmbed = (token["0"]/token["1"]).reshape(1, 300)
