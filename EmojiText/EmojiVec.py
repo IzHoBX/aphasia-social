@@ -41,10 +41,7 @@ class EmojiVec:
         if token == None:# exception seems will not be raised
             return self.nameToLink[self.indexToName[random.randrange(0, len(self.indexToName))]], sys.maxsize
         token["0"] = numpy.array(token["0"])
-        if not token["1"] == 0:
-            wordEmbed = (token["0"]/token["1"]).reshape(1, 300)
-        else:
-            wordEmbed = token["0"].reshape(1, 300)
+        wordEmbed = (token["0"]).reshape(1, 300)
         distance, index = self.nrbs.kneighbors(wordEmbed)
         print(self.indexToName[index[0][0]])
         return self.nameToLink[self.indexToName[index[0][0]]], distance[0][0]
