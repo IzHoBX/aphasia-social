@@ -33,7 +33,7 @@ def f(request):
         if (not link in ans) or ans[link] < score:
             ans[link] = score
     anslist = []
-    for link, score in ans:
+    for link, score in ans.items():
         anslist.append((link, score))
     if len(anslist) > RETURN_LIMIT:
         anslist.sort(reverse=True, key=takeScore)
