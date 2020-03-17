@@ -25,16 +25,20 @@ def f(request):
     sentence = getSentence(request.get_full_path())
     print("Received sentence:" + sentence)
 
-    ans = []
+    ans = {}
     for word in KeywordExtract.ExtractKeyword.extractKeyword(sentence):
         print("extractKeyword:" + word)
         link, score = emoji2Vec.getEmoji(word)
         print("emoji:" + link)
-        ans.append((link, score))
-    if len(ans) > RETURN_LIMIT:
-        ans.sort(reverse=True, key=takeScore)
-        ans = ans[:RETURN_LIMIT]
-    x = json.dumps({"emojis":ans})
+        if (not link in ans) or ans[link] < score:
+            ans[link] = score
+    anslist = []
+    for link, score in ans:
+        anslist.append((link, score))
+    if len(anslist) > RETURN_LIMIT:
+        anslist.sort(reverse=True, key=takeScore)
+        anslist = anslist[:RETURN_LIMIT]
+    x = json.dumps({"emojis":anslist})
 
     print("sending response...")
 
