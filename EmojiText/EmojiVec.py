@@ -28,6 +28,8 @@ class EmojiVec:
     def getEmoji(self, word):
         if not word[-1].isalpha():
             word = word[:-1]
+        if len(word) > 0 and not word[0].isalpha():
+            word = word[1:]
         if len(word) == 0:
             return self.nameToLink[self.indexToName[random.randrange(0, len(self.indexToName))]], 0
         word = word.lower()
