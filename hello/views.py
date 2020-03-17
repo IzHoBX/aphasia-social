@@ -30,7 +30,7 @@ def f(request):
         print("extractKeyword:" + word)
         link, score = emoji2Vec.getEmoji(word)
         print("emoji:" + link)
-        if (not link in ans) or ans[link] < score:
+        if (not link in ans) or ans[link] > score:
             ans[link] = score
     anslist = []
     for link, score in ans.items():
