@@ -26,13 +26,13 @@ def f(request):
     print("Received sentence:" + sentence)
 
     ans = {}
+    # assumes punctuation sanitization is done here
     listOfKeywords = KeywordExtract.ExtractKeyword.extractKeyword(sentence)
     for i in range(0, len(listOfKeywords)):
         if (not listOfKeywords[i].find("-") == -1) and (not listOfKeywords[i].find("-") == 0) and (not listOfKeywords[i].find("-") == len(listOfKeywords[i])-1):
             temp = listOfKeywords[i].split("-")
-            for t in temp:
-                listOfKeywords.append(t)
             listOfKeywords = listOfKeywords[:i] + listOfKeywords[i+1:]
+            listOfKeywords += temp
     listOfKeywords = list(set(listOfKeywords))
     ans = {}
     for (link, score) in emoji2Vec.getEmojiForListOfWords(listOfKeywords):
