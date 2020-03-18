@@ -39,6 +39,9 @@ def f(request):
             listOfKeywords = listOfKeywords[:i] + listOfKeywords[i+1:]
             listOfKeywords += temp
     listOfKeywords = list(set(listOfKeywords))
+    for word in ABSTRACT_LIST:
+        if word in listOfKeywords:
+            listOfKeywords.remove(word)
     ans = {}
     for (link, score) in emoji2Vec.getEmojiForListOfWords(listOfKeywords):
         if (not link in ans) or ans[link] > score:
