@@ -11,7 +11,7 @@ AGENT = "/agent?sentence="
 PREFIX = "/agent?sentence="
 RETURN_LIMIT = 5
 
-ABSTRACT_LIST = ["high", "my", "a", "Nobita", "feel", "Doraemon", "go"]
+ABSTRACT_LIST = ["high", "my", "a", "Nobita", "feel", "Doraemon", "go", "all", "the"]
 
 # Create your views here.
 def index(request):
