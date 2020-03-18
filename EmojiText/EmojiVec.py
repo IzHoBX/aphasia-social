@@ -1,4 +1,3 @@
-import emoji
 from sklearn.neighbors import NearestNeighbors
 import spacy
 import numpy
