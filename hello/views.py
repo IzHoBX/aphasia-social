@@ -11,6 +11,8 @@ AGENT = "/agent?sentence="
 PREFIX = "/agent?sentence="
 RETURN_LIMIT = 5
 
+ABSTRACT_LIST = ["high", "my", "a", "Nobita", "feel", "Doraemon", "go"]
+
 # Create your views here.
 def index(request):
     return render(request, "index.html")
@@ -29,6 +31,8 @@ def f(request):
     # assumes punctuation sanitization is done here
     listOfKeywords = KeywordExtract.ExtractKeyword.extractKeyword(sentence)
     for i in range(0, len(listOfKeywords)):
+        if listOfKeywords[i] in ABSTRACT_LIST:
+            continue
         if (not listOfKeywords[i].find("-") == -1) and (not listOfKeywords[i].find("-") == 0) and (not listOfKeywords[i].find("-") == len(listOfKeywords[i])-1):
             temp = listOfKeywords[i].split("-")
             listOfKeywords = listOfKeywords[:i] + listOfKeywords[i+1:]
