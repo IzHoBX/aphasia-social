@@ -5,7 +5,6 @@ import pickle
 import google.cloud.firestore
 import random
 import sys
-import strings
 
 SPACE_PATH = "EmojiText/emojispace"
 NAME2LINK_PATH = "EmojiText/emojilib"
