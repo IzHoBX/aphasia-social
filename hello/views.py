@@ -32,6 +32,7 @@ def f(request):
     listOfKeywords = KeywordExtract.ExtractKeyword.extractKeyword(sentence)
     for i in range(0, len(listOfKeywords)):
         if listOfKeywords[i] in ABSTRACT_LIST:
+            listOfKeywords = listOfKeywords[:i] + listOfKeywords[i+1:]
             continue
         if (not listOfKeywords[i].find("-") == -1) and (not listOfKeywords[i].find("-") == 0) and (not listOfKeywords[i].find("-") == len(listOfKeywords[i])-1):
             temp = listOfKeywords[i].split("-")
