@@ -5,6 +5,7 @@ import pickle
 import google.cloud.firestore
 import random
 import sys
+import strings
 
 SPACE_PATH = "EmojiText/emojispace"
 NAME2LINK_PATH = "EmojiText/emojilib"
@@ -25,11 +26,14 @@ class EmojiVec:
         self.db = google.cloud.firestore.Client.from_service_account_json('EmojiText/auth.json')
         print("Emoji2Vec instantiated")
 
-    def getEmoji(self, embed):
-        embed = numpy.array(embed["0"]).reshape(1, 300)
-        distance, index = self.nrbs.kneighbors(embed)
-        print(self.indexToName[index[0][0]])
-        return self.nameToLink[self.indexToName[index[0][0]]], distance[0][0]
+    def getEmojiForListOfWordEmbeddings(self, twoDNumpyArray):
+        distance, index = self.nrbs.kneighbors(twoDNumpyArray)
+        link = []
+        for i in range(0, len(index)):
+            name = self.indexToName[index[i][0]]
+            print(name)
+            link.append([self.nameToLink[name], distance[i][0]])
+        return link
 
     def preprocessWord(self, word):
         if not word[-1].isalpha():
@@ -42,13 +46,11 @@ class EmojiVec:
     def getEmojiForListOfWords(self, listOfWords):
         listOfSanitizedWordsRef = []
         for word in listOfWords:
-            word = self.preprocessWord(word)
-            if len(word) > 0:
-                listOfSanitizedWordsRef.append(self.db.collection("vectors").document(word))
+            listOfSanitizedWordsRef.append(self.db.collection("vectors").document(word))
         allEmbeds = list(self.db.get_all(listOfSanitizedWordsRef))
-        allAns = []
+        nonempty = []
         for embed in allEmbeds:
             embed = embed.to_dict()
             if not embed == None:
-                allAns.append(self.getEmoji(embed))
-        return allAns
+                nonempty.append(embed)
+        return self.getEmojiForListOfWordEmbeddings(numpy.array(nonempty))
