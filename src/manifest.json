@@ -1,0 +1,22 @@
+{
+  "manifest_version": 2,
+
+  "name"        : "Lens of Aphasia",
+  "description" : "A filter to connect Aphasia patients to the social network.",  
+  "version"     : "1.0",
+
+  "content_scripts": [
+    {
+      "matches"   : ["https://twitter.com/*"],
+      "js"        : ["js/contentscript.js"]
+    }
+  ],
+
+  "web_accessible_resources": ["js/assistant.js"],
+
+  "permissions": [
+    "<all_urls>",
+    "webRequest",
+    "https://testi1220.herokuapp.com/*"
+  ]
+}
