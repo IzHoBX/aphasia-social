@@ -26,10 +26,16 @@ def f(request):
     print("Received sentence:" + sentence)
 
     ans = {}
-    for word in KeywordExtract.ExtractKeyword.extractKeyword(sentence):
-        print("extractKeyword:" + word)
-        link, score = emoji2Vec.getEmoji(word)
-        print("emoji:" + link)
+    listOfKeywords = KeywordExtract.ExtractKeyword.extractKeyword(sentence)
+    for i in range(0, listOfKeywords):
+        if (not listOfKeywords[i].find("-") == -1) and (not listOfKeywords[i].find("-") == 0) and (not listOfKeywords[i].find("-") == len(listOfKeywords[i]-1)):
+            temp = listOfKeywords[i].split("-")
+            for t in temp:
+                listOfKeywords.append(t)
+            listOfKeywords = listOfKeywords[:i] + listOfKeywords[i+1:]
+    listOfKeywords = list(set(listOfKeywords))
+    ans = {}
+    for (link, score) in emoji2Vec.getEmojiForListOfWords(listOfKeywords):
         if (not link in ans) or ans[link] > score:
             ans[link] = score
     anslist = []

@@ -26,22 +26,30 @@ class EmojiVec:
         self.db = google.cloud.firestore.Client.from_service_account_json('EmojiText/auth.json')
         print("Emoji2Vec instantiated")
 
-    def getEmoji(self, word):
+    def getEmoji(self, embed):
+        embed = numpy.array(embed["0"]).reshape(1, 300)
+        distance, index = self.nrbs.kneighbors(embed)
+        print(self.indexToName[index[0][0]])
+        return self.nameToLink[self.indexToName[index[0][0]]], distance[0][0]
+
+    def preprocessWord(self, word):
         if not word[-1].isalpha():
             word = word[:-1]
         if len(word) > 0 and not word[0].isalpha():
             word = word[1:]
-        if len(word) == 0:
-            return self.nameToLink[self.indexToName[random.randrange(0, len(self.indexToName))]], sys.maxsize
         word = word.lower()
-        try:
-            token = self.db.collection("vectors").document(word).get().to_dict()
-        except google.cloud.exceptions.NotFound:
-            return self.nameToLink[self.indexToName[random.randrange(0, len(self.indexToName))]], sys.maxsize
-        if token == None:# exception seems will not be raised
-            return self.nameToLink[self.indexToName[random.randrange(0, len(self.indexToName))]], sys.maxsize
-        token["0"] = numpy.array(token["0"])
-        wordEmbed = (token["0"]).reshape(1, 300)
-        distance, index = self.nrbs.kneighbors(wordEmbed)
-        print(self.indexToName[index[0][0]])
-        return self.nameToLink[self.indexToName[index[0][0]]], distance[0][0]
+        return word
+
+    def getEmojiForListOfWords(self, listOfWords):
+        listOfSanitizedWordsRef = []
+        for word in listOfWords:
+            word = self.preprocessWord(word)
+            if len(word) > 0:
+                listOfSanitizedWordsRef.append(self.db.collection("vectors").document(word))
+        allEmbeds = list(self.db.get_all(listOfSanitizedWordsRef))
+        allAns = []
+        for embed in allEmbeds:
+            embed = embed.to_dict()
+            if not embed == None:
+                allAns.append(self.getEmoji(embed))
+        return allAns
