@@ -58,7 +58,7 @@ UpdateAnnotate.py | This is a script that takes the content in table.csv and tur
 resetspace.py | This script reads all emojis in emojilib and obtain their embeddings through querying the spaCy large model with their description names. All the embeddings are then plotted in a vector KNeighbors space, which is pickled into `emojispace`
 EmojiVec.py | The class that performs the translation. Given a list of keywords, it will extract the embeddings from our database hosted at Google Cloud Firestore. The vector will the be plotted in `emojispace` and the nearest emoji neighbor is returned. 
 LocalEmojiVec.py | A variant of `EmojiVec.py` that retrieves keyword embeddings from a local spaCy model instead. Not used deployment because of slow loading of models on Heroku. 
-emojilib | A pre-trained set of emoji embeddings downloaded from https://github.com/uclnlp/emoji2vec. It is trained using word2vec models, but unfortunately accuracy is below our method of using description of emojis. 
+emojilib | A pre-trained set of emoji embeddings downloaded from https://github.com/uclnlp/emoji2vec. It is trained using word2vec models by treating each emoji as a word token, but unfortunately accuracy is below our method of using description of emojis. 
 auth.json | Required to call to our Firestore database. A server client API is used and hence this file exposes our API key. This is a hacky work around for the fact that there is no Firestore client API in python. It will be removed once alternative is found or abusing use is discovered. 
 
 
