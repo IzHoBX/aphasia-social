@@ -1,1 +1,2 @@
-web: gunicorn gettingstarted.wsgi --timeout 300 --log-file -
+worker: python backend.py
+web: gunicorn gettingstarted.wsgi --log-file -
