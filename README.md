@@ -23,12 +23,13 @@ To use it,
 A google extension that extracts the sentences of posts on Twitter thorugh the HTML structure of the homepage. All of its code can be found in `/src`. 
 
 ### Back end
+**Please switch to branch S1** for the running back end codes. 
+
 The backend handles the sentences extracted by the front end and returns data links of emojis. It is built on python Django framework, more particularly, Django-Heroku as we have chosen to host it on [Heroku](https://testi1220.herokuapp.com/). There are different folders containing all the scripts and codes that we used during the project. 
 
 If you are interested in using the code, make sure you have Python 3.7 [installed locally](http://install.python-guide.org). Then, **please install all the packages in requirements.txt** At the time of this writing, it is fine that you just install the latest version of the packages through pip. If you intends to re-host this under your own account on Heroku, we recommend install the [Heroku CLI](https://devcenter.heroku.com/articles/heroku-cli) for easy management, although it is not mandatory. 
 
 #### Framework files
-**Please switch to branch S1** for the running back end codes. 
 
 The code that serves the API calls live in `/hello`. 
 
