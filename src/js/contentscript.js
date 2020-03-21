@@ -30,6 +30,32 @@ async function getJson(sentence) {
 
 const filter = async function() {
   try {
+{
+  // get post lists
+let allPost = document.getElementsByTagName('main')[0].children[0].children[0].children[0].children[0].children[0].children[3].children[0].children[0].getElementsByTagName('div')[0].children[0].children[0]
+
+
+// clear who to follow
+var n = allPost.childElementCount
+var postToRemove = []
+for (i=0; i<n; i++) {
+    if (allPost.children[i].children[0].hasChildNodes()) {
+        if (allPost.children[i].children[0].children[0].tagName != "ARTICLE") {
+            console.log(i)
+            postToRemove.push(allPost.children[i])
+        }
+    }
+}
+for (i=postToRemove.length-1; i>=0; i--) {
+    allPost.removeChild(postToRemove[i])
+}
+
+}
+
+{
+  document.getElementsByTagName('main')[0].children[0].children[0].children[0].children[1].innerHTML = "";
+}
+
     console.log("filtering");
     const allPost = document.getElementsByTagName('main')[0].children[0].children[0].children[0].children[0].children[0].children[3].children[0].children[0].getElementsByTagName('div')[0].children[0].children[0].children;
     for (const post of allPost) {
