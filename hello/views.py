@@ -9,6 +9,7 @@ import json
 
 AGENT = "/agent?sentence="
 PREFIX = "/agent?sentence="
+OTHER_PREFIX = "/other"
 RETURN_LIMIT = 5
 
 ABSTRACT_LIST = ["high", "my", "a", "Nobita", "feel", "Doraemon", "go", "all", "the"]
@@ -22,6 +23,11 @@ def takeScore(x):
     return x[1]
 
 def f(request):
+    if request.get_full_path().index(OTHER_PREFIX) == 0:
+        x = json.dumps({"res":"awesome"})
+        res = HttpResponse(x, content_type="application/json")
+        res['Access-Control-Allow-Origin'] = '*'
+        return res
     emoji2Vec = EmojiText.EmojiVec.EmojiVec()
     print("XXXX: accepted:" + request.get_full_path())
     sentence = getSentence(request.get_full_path())
