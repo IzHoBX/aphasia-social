@@ -12,7 +12,7 @@ PREFIX = "/agent?sentence="
 OTHER_PREFIX = "/other"
 RETURN_LIMIT = 5
 
-ABSTRACT_LIST = ["high", "my", "a", "Nobita", "feel", "Doraemon", "go", "all", "the"]
+ABSTRACT_LIST = set(["high", "my", "a", "Nobita", "feel", "Doraemon", "go", "all", "the"])
 
 # Create your views here.
 def index(request):
