@@ -27,7 +27,6 @@ class EmojiVec:
         # get basic auth meta
         f = open('EmojiText/auth.json')
         temp = json.load(f)
-        print(temp)
 
         # adds key from environ
         temp['private_key'] = os.environ['FIRECLOUD_KEY'].replace("\\n", "\n")
