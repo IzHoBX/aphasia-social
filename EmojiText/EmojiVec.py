@@ -26,7 +26,7 @@ class EmojiVec:
         self.nameToLink = pickle.load(open(NAME2LINK_PATH, "rb"))
         f = open('EmojiText/auth.json')
         temp = json.load(f)
-        temp['private_key'] = os.environ['FIRECLOUD_KEY']
+        temp['private_key'] = os.environ['FIRECLOUD_KEY'].replace("\\n", "\n")
         f.close()
         f = open('EmojiText/auth.json', 'w')
         json.dump(temp, f)
