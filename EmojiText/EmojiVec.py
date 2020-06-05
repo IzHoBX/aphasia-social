@@ -5,6 +5,7 @@ import pickle
 import google.cloud.firestore
 import random
 import sys
+import json
 
 SPACE_PATH = "EmojiText/emojispace"
 NAME2LINK_PATH = "EmojiText/emojilib"
@@ -22,6 +23,13 @@ class EmojiVec:
         self.indexToName = model[1]
         self.nrbs = model[0]
         self.nameToLink = pickle.load(open(NAME2LINK_PATH, "rb"))
+        f = open('EmojiText/auth.json')
+        temp = json.load(f)
+        temp['private_key'] = os.environ['FIRECLOUD_KEY']
+        f.close()
+        f = open('EmojiText/auth.json', 'w')
+        json.dump(temp, f)
+        f.close()
         self.db = google.cloud.firestore.Client.from_service_account_json('EmojiText/auth.json')
         print("Emoji2Vec instantiated")
 
