@@ -22,12 +22,13 @@ def index(request):
 def takeScore(x):
     return x[1]
 
+def other(request):
+    x = json.dumps({"res":"awesome"})
+    res = HttpResponse(x, content_type="application/json")
+    res['Access-Control-Allow-Origin'] = '*'
+    return res
+
 def f(request):
-    if request.get_full_path().index(OTHER_PREFIX) == 0:
-        x = json.dumps({"res":"awesome"})
-        res = HttpResponse(x, content_type="application/json")
-        res['Access-Control-Allow-Origin'] = '*'
-        return res
     emoji2Vec = EmojiText.EmojiVec.EmojiVec()
     print("XXXX: accepted:" + request.get_full_path())
     sentence = getSentence(request.get_full_path())
