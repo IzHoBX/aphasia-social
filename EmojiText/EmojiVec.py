@@ -24,16 +24,32 @@ class EmojiVec:
         self.indexToName = model[1]
         self.nrbs = model[0]
         self.nameToLink = pickle.load(open(NAME2LINK_PATH, "rb"))
+        # get basic auth meta
         f = open('EmojiText/auth.json')
         temp = json.load(f)
         print(temp)
+
+        # adds key from environ
         temp['private_key'] = os.environ['FIRECLOUD_KEY'].replace("\\n", "\n")
+        f.close()
+
+        # write back to file
+        f = open('EmojiText/auth.json', 'w')
+        json.dump(temp, f)
+        f.close()
+
+        # read from modified file with key
+        f = open('EmojiText/auth.json')
+        self.db = google.cloud.firestore.Client.from_service_account_json('EmojiText/auth.json')
+
+        # revert file back to original state
+        f = open('EmojiText/auth.json')
+        temp = json.load(f)
+        temp.pop('private_key')
         f.close()
         f = open('EmojiText/auth.json', 'w')
         json.dump(temp, f)
         f.close()
-        f = open('EmojiText/auth.json')
-        self.db = google.cloud.firestore.Client.from_service_account_json('EmojiText/auth.json')
         print("Emoji2Vec instantiated")
 
     def getEmojiForListOfWordEmbeddings(self, twoDNumpyArray):
