@@ -6,6 +6,7 @@ import google.cloud.firestore
 import random
 import sys
 import json
+import os
 
 SPACE_PATH = "EmojiText/emojispace"
 NAME2LINK_PATH = "EmojiText/emojilib"
