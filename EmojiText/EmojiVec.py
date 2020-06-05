@@ -27,6 +27,7 @@ class EmojiVec:
         f = open('EmojiText/auth.json')
         temp = json.load(f)
         temp['private_key'] = os.environ['FIRECLOUD_KEY']
+        print(temp)
         f.close()
         f = open('EmojiText/auth.json', 'w')
         json.dump(temp, f)
