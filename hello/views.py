@@ -38,6 +38,8 @@ def f(request):
     # assumes punctuation sanitization is done here
     listOfKeywords = KeywordExtract.ExtractKeyword.extractKeyword(sentence)
     for i in range(0, len(listOfKeywords)):
+        if i >= len(listOfKeywords):#to handle the issue where the length of list decreases as elements are removed 
+            break
         if listOfKeywords[i] in ABSTRACT_LIST:
             listOfKeywords = listOfKeywords[:i] + listOfKeywords[i+1:]
             continue
