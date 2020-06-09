@@ -78,4 +78,7 @@ class EmojiVec:
             embed = embed.to_dict()
             if not embed == None:
                 nonempty.append(embed["0"])
-        return self.getEmojiForListOfWordEmbeddings(numpy.array(nonempty))
+        if len(nonempty) > 0:
+            return self.getEmojiForListOfWordEmbeddings(numpy.array(nonempty))
+        else:
+            return [] 
