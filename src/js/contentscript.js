@@ -12,6 +12,10 @@ function addImg(url) {
   return "<img src='" + url + "'>";
 }
 
+function shouldOmmit(str) {
+  return str.indexOf("http://") == 0 || str.indexOf("https://") == 0
+}
+
 async function getJson(sentence) {
   sentence = sentence.replace(/ /g, '+');
   console.log("sending sentence " + sentence);
@@ -43,10 +47,14 @@ const filter = async function() {
     const allPost = document.getElementsByTagName('main')[0].children[0].children[0].children[0].children[0].children[0].children[3].children[0].children[0].getElementsByTagName('div')[0].children[0].children[0].children;
     for (const post of allPost) {
       try {
-        const tweet = post.querySelector('[data-testid="tweet"]').children[1].children[1].children[0].children[0].children[0];
-        console.log("found post text in innerHTML: " + tweet.innerHTML);
-        htmlstr = await getJson(tweet.innerHTML);
-        tweet.innerHTML = htmlstr;
+        const tweet = post.querySelector('[data-testid="tweet"]').children[1].children[1].children[0].children[0].children;
+        for (const line of tweet) {
+          if (line.innerText.length > 0 && !shouldOmmit(line.innerText)) {//for special elements like emojis and hashtags have innerText = ""
+            console.log("found post text in tweet: " + line.innerText);
+            emoji = await getJson(line.innerText);
+            line.innerHTML = emoji;
+          }
+        }
       } catch (e) {
         console.log(e);
       }
