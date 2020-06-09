@@ -1,8 +1,8 @@
 {
   "manifest_version": 2,
 
-  "name"        : "Lens of Aphasia",
-  "description" : "A filter to connect Aphasia patients to the social network.",  
+  "name"        : "Aphasia Social",
+  "description" : "A filter to connect Aphasia patients to the social network.",
   "version"     : "1.0",
 
   "content_scripts": [
