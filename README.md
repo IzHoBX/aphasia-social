@@ -65,6 +65,10 @@ LocalEmojiVec.py | A variant of `EmojiVec.py` that retrieves keyword embeddings 
 emojilib | A pre-trained set of emoji embeddings downloaded from https://github.com/uclnlp/emoji2vec. It is trained using word2vec models by treating each emoji as a word token, but unfortunately accuracy is below our method of using description of emojis.
 auth.json | Required to call to our Firestore database. A server client API is used and hence this file exposes our API key. This is a hacky work around for the fact that there is no Firestore client API in python. It will be removed once alternative is found or abusing use is discovered.
 
+## Next Steps
+1. Checks if the HTML structure of twitter.com homepage is the same for any region/computer/browser/OS. If it is not, devise device-specific approach or a more robust text detection and retrieval approach.
+2. Improves annotation for Emoji descriptions.
+3. Extends Abstract keyword list. 
 
 ## Questions
 If you have any questions about the repo, please reach out to us through the issue tracker.
