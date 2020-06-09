@@ -16,13 +16,12 @@ async function getJson(sentence) {
   sentence = sentence.replace(/ /g, '+');
   console.log("sending sentence " + sentence);
   let response = await fetch(`https://testi1220.herokuapp.com/agent?sentence=${sentence}`);
-  console.log(response);
+  console.log("received emoji response: " +response);
   let obj = await response.json();
-  console.log(obj);
+  console.log("parsed res into json: " + obj);
 
   htmlStr = "";
   for (const emoji of obj["emojis"]) {
-    console.log(emoji);
     htmlStr += addImg(emoji[0]);
   }
   return htmlStr;
@@ -30,38 +29,22 @@ async function getJson(sentence) {
 
 const filter = async function() {
   try {
-{
-  // get post lists
-let allPost = document.getElementsByTagName('main')[0].children[0].children[0].children[0].children[0].children[0].children[3].children[0].children[0].getElementsByTagName('div')[0].children[0].children[0]
-
-
-// clear who to follow
-var n = allPost.childElementCount
-var postToRemove = []
-for (i=0; i<n; i++) {
-    if (allPost.children[i].children[0].hasChildNodes()) {
-        if (allPost.children[i].children[0].children[0].tagName != "ARTICLE") {
-            console.log(i)
-            postToRemove.push(allPost.children[i])
-        }
+    if (firstTime) {
+      console.log("removing side bar ");
+      let sideBar = document.getElementsByTagName("main")[0].children[0].children[0].children[0].children[1].children[0].children[1].children[0].children[0].children[0]
+      sideBar.removeChild(sideBar.children[2]) // trending
+      sideBar.removeChild(sideBar.children[2]) // who to follow
+      firstTime = false
     }
-}
-for (i=postToRemove.length-1; i>=0; i--) {
-    allPost.removeChild(postToRemove[i])
-}
 
-}
+    //document.getElementsByTagName('main')[0].children[0].children[0].children[0].children[1].innerHTML = "";
 
-{
-  document.getElementsByTagName('main')[0].children[0].children[0].children[0].children[1].innerHTML = "";
-}
-
-    console.log("filtering");
+    console.log("replacing texts with emojis");
     const allPost = document.getElementsByTagName('main')[0].children[0].children[0].children[0].children[0].children[0].children[3].children[0].children[0].getElementsByTagName('div')[0].children[0].children[0].children;
     for (const post of allPost) {
       try {
         const tweet = post.querySelector('[data-testid="tweet"]').children[1].children[1].children[0].children[0].children[0];
-        console.log(tweet.innerHTML);
+        console.log("found post text in innerHTML: " + tweet.innerHTML);
         htmlstr = await getJson(tweet.innerHTML);
         tweet.innerHTML = htmlstr;
       } catch (e) {
@@ -73,4 +56,6 @@ for (i=postToRemove.length-1; i>=0; i--) {
   }
 }
 
+
+var firstTime = true
 document.addEventListener("click", filter);
