@@ -7,49 +7,63 @@ import KeywordExtract.ExtractKeyword
 import EmojiText.EmojiVec
 import json
 
-import urllib
-import requests
-
 AGENT = "/agent?sentence="
 PREFIX = "/agent?sentence="
+OTHER_PREFIX = "/other"
 RETURN_LIMIT = 5
+
+ABSTRACT_LIST = set(["high", "my", "a", "Nobita", "feel", "Doraemon", "go", "all", "the"])
 
 # Create your views here.
 def index(request):
-    global count
     return render(request, "index.html")
     # return HttpResponse('Hello from Python!')
 
 def takeScore(x):
     return x[1]
 
+def other(request):
+    x = json.dumps({"res":"awesome"})
+    res = HttpResponse(x, content_type="application/json")
+    res['Access-Control-Allow-Origin'] = '*'
+    return res
+
 def f(request):
-    '''global emoji2Vec
-    print("Testing:" + str(count))
+    emoji2Vec = EmojiText.EmojiVec.EmojiVec()
     print("XXXX: accepted:" + request.get_full_path())
     sentence = getSentence(request.get_full_path())
     print("Received sentence:" + sentence)
 
-    ans = []
-    for word in KeywordExtract.ExtractKeyword.extractKeyword(sentence):
-        print("extractKeyword:" + word)
-        link, score = emoji2Vec.getEmoji(word)
-        print("emoji:" + link)
-        ans.append((link, score))
-    if len(ans) > RETURN_LIMIT:
-        ans.sort(reverse=True, key=takeScore)
-        ans = ans[:RETURN_LIMIT]
-    x = json.dumps({"emojis":ans})
+    ans = {}
+    # assumes punctuation sanitization is done here
+    listOfKeywords = KeywordExtract.ExtractKeyword.extractKeyword(sentence)
+    for i in range(0, len(listOfKeywords)):
+        if listOfKeywords[i] in ABSTRACT_LIST:
+            listOfKeywords = listOfKeywords[:i] + listOfKeywords[i+1:]
+            continue
+        if (not listOfKeywords[i].find("-") == -1) and (not listOfKeywords[i].find("-") == 0) and (not listOfKeywords[i].find("-") == len(listOfKeywords[i])-1):
+            temp = listOfKeywords[i].split("-")
+            listOfKeywords = listOfKeywords[:i] + listOfKeywords[i+1:]
+            listOfKeywords += temp
+    listOfKeywords = list(set(listOfKeywords))
+    for word in ABSTRACT_LIST:
+        if word in listOfKeywords:
+            listOfKeywords.remove(word)
+    ans = {}
+    for (link, score) in emoji2Vec.getEmojiForListOfWords(listOfKeywords):
+        if (not link in ans) or ans[link] > score:
+            ans[link] = score
+    anslist = []
+    for link, score in ans.items():
+        anslist.append((link, score))
+    if len(anslist) > RETURN_LIMIT:
+        anslist.sort(key=takeScore)
+        anslist = anslist[:RETURN_LIMIT]
+    x = json.dumps({"emojis":anslist})
 
     print("sending response...")
 
     res = HttpResponse(x, content_type="application/json")
-    res['Access-Control-Allow-Origin'] = '*'
-    '''
-    url = "http://localhost:7777/agent"
-    data = urllib.parse.urlencode({"sentence":getSentence(request.get_full_path())})
-    r = requests.get(url, data)
-    res = HttpResponse(r.text, content_type="application/json")
     res['Access-Control-Allow-Origin'] = '*'
 
     return res

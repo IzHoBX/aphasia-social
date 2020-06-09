@@ -1,10 +1,14 @@
-import emoji
-from sklearn.metrics.pairwise import cosine_similarity
 from sklearn.neighbors import NearestNeighbors
 import spacy
 import numpy
 import pickle
+import google.cloud.firestore
+import random
+import sys
+import json
+import os
 
+SPACE_PATH = "EmojiText/emojispace"
 NAME2LINK_PATH = "EmojiText/emojilib"
 
 class EmojiVec:
@@ -12,26 +16,66 @@ class EmojiVec:
     nlp = ""
     nrbs = ""
     indexToName = []
+    db = ""
 
     def __init__(self):
         print("loading model")
-        self.nlp = spacy.load("en_core_web_md")
+        model = pickle.load(open(SPACE_PATH, "rb"))
+        self.indexToName = model[1]
+        self.nrbs = model[0]
         self.nameToLink = pickle.load(open(NAME2LINK_PATH, "rb"))
-        allVectors = []
-        for name, link in self.nameToLink.items():
-            token = self.nlp(name)
-            if token.vector_norm == 0:
-                print(name)
-            else:
-                allVectors.append(token.vector/token.vector_norm)
-            self.indexToName.append(name)
-        allVectors = numpy.array(allVectors)
-        self.nbrs = NearestNeighbors(n_neighbors=1, algorithm='ball_tree').fit(allVectors)
+        # get basic auth meta
+        f = open('EmojiText/auth.json')
+        temp = json.load(f)
+
+        # adds key from environ
+        temp['private_key'] = os.environ['FIRECLOUD_KEY'].replace("\\n", "\n")
+        f.close()
+
+        # write back to file
+        f = open('EmojiText/auth.json', 'w')
+        json.dump(temp, f)
+        f.close()
+
+        # read from modified file with key
+        f = open('EmojiText/auth.json')
+        self.db = google.cloud.firestore.Client.from_service_account_json('EmojiText/auth.json')
+
+        # revert file back to original state
+        f = open('EmojiText/auth.json')
+        temp = json.load(f)
+        temp.pop('private_key')
+        f.close()
+        f = open('EmojiText/auth.json', 'w')
+        json.dump(temp, f)
+        f.close()
         print("Emoji2Vec instantiated")
 
-    def getEmoji(self, word):
-        token = self.nlp(word)
-        wordEmbed = (token.vector/token.vector_norm).reshape(1, 300)
-        distance, index = self.nbrs.kneighbors(wordEmbed)
-        print(self.indexToName[index[0][0]])
-        return self.nameToLink[self.indexToName[index[0][0]]], distance[0][0]
+    def getEmojiForListOfWordEmbeddings(self, twoDNumpyArray):
+        distance, index = self.nrbs.kneighbors(twoDNumpyArray)
+        link = []
+        for i in range(0, len(index)):
+            name = self.indexToName[index[i][0]]
+            print(name)
+            link.append([self.nameToLink[name], distance[i][0]])
+        return link
+
+    def preprocessWord(self, word):
+        if not word[-1].isalpha():
+            word = word[:-1]
+        if len(word) > 0 and not word[0].isalpha():
+            word = word[1:]
+        word = word.lower()
+        return word
+
+    def getEmojiForListOfWords(self, listOfWords):
+        listOfSanitizedWordsRef = []
+        for word in listOfWords:
+            listOfSanitizedWordsRef.append(self.db.collection("vectors").document(word))
+        allEmbeds = list(self.db.get_all(listOfSanitizedWordsRef))
+        nonempty = []
+        for embed in allEmbeds:
+            embed = embed.to_dict()
+            if not embed == None:
+                nonempty.append(embed["0"])
+        return self.getEmojiForListOfWordEmbeddings(numpy.array(nonempty))

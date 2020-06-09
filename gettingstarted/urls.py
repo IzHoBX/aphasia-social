@@ -5,6 +5,9 @@ from django.contrib import admin
 admin.autodiscover()
 
 import hello.views
+import EmojiText.EmojiVec
+
+emoji2Vec = EmojiText.EmojiVec.EmojiVec()
 
 # To add a new path, first import the app:
 # import blog
@@ -17,6 +20,7 @@ import hello.views
 urlpatterns = [
     path("", hello.views.index, name="index"),
     path("agent", hello.views.f, name="f"),
+    path("other", hello.views.f, name="f"),
     path("db/", hello.views.db, name="db"),
     path("admin/", admin.site.urls),
 ]
